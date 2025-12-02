@@ -1,4 +1,4 @@
-// Daily Task Scheduler Application
+// Task Dashboard Application
 class TaskScheduler {
     constructor() {
         this.tasks = [];
@@ -337,8 +337,8 @@ class TaskScheduler {
 
     saveData() {
         try {
-            localStorage.setItem('dailyScheduler_tasks', JSON.stringify(this.tasks));
-            localStorage.setItem('dailyScheduler_plans', this.plans);
+            localStorage.setItem('taskDashboard_tasks', JSON.stringify(this.tasks));
+            localStorage.setItem('taskDashboard_plans', this.plans);
         } catch (error) {
             console.error('Failed to save data:', error);
             this.showNotification('Failed to save data to local storage', 'error');
@@ -347,12 +347,19 @@ class TaskScheduler {
 
     loadData() {
         try {
-            const tasksData = localStorage.getItem('dailyScheduler_tasks');
+            // Try new keys first, then fall back to old keys for backward compatibility
+            let tasksData = localStorage.getItem('taskDashboard_tasks');
+            if (!tasksData) {
+                tasksData = localStorage.getItem('dailyScheduler_tasks');
+            }
             if (tasksData) {
                 this.tasks = JSON.parse(tasksData);
             }
 
-            const plansData = localStorage.getItem('dailyScheduler_plans');
+            let plansData = localStorage.getItem('taskDashboard_plans');
+            if (!plansData) {
+                plansData = localStorage.getItem('dailyScheduler_plans');
+            }
             if (plansData) {
                 this.plans = plansData;
                 this.plansTextarea.value = plansData;
